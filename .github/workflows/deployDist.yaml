@@ -2,15 +2,42 @@ name: deploy dist
 on: push
 
 jobs:
-    deploy:
+    test:
+
         runs-on: ubuntu-latest
         steps:
          - name: get code
            uses: actions/checkout@v4
         
   
-         - name: show files
+         - name: Show files
            run:  ls -la
+
+         - name: Node 20
+           uses: actions/setup-node@v4
+           with:
+              node-version: 20
+           
+         - name: Print node v
+           run: node -v      
+
+         - name: Install Deps
+           run: npm ci
+           
+         - name: Run Tests
+           run: npm run test
+
+           
+
+    deploy:
+         needs: test
+         runs-on: ubuntu-latest 
+         
+         steps:
+          - name: deploy
+            run: echo "🚀 Deploying application..."
+       
+           
         #  run: |
          #  echo "cloning repo"
          #  echo "${{toJson(github)}}"
