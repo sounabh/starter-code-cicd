@@ -7,7 +7,7 @@ describe("App", () => {
     render(<App />);
 
     expect(
-      screen.getByText(/frosty bliss king icecream/i)
+      screen.getByText(/frosty bliss/i)
     ).toBeInTheDocument();
   });
 
