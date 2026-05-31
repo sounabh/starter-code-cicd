@@ -5,8 +5,13 @@ jobs:
     deploy:
         runs-on: ubuntu-latest
         steps:
-        - name: get code
-          run: |
-           echo "cloning repo"
-           echo "${{toJson(github)}}"
-           git clone https://github.com/${{github.repository}}.git
+         - name: get code
+           uses: actions/checkout@v4
+        
+  
+         - name: show files
+           run:  ls -la
+        #  run: |
+         #  echo "cloning repo"
+         #  echo "${{toJson(github)}}"
+         #  git clone https://github.com/${{github.repository}}.git

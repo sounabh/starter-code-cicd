@@ -1,22 +1,31 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { describe, test, expect } from 'vitest'
-import App from './App';
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+import App from "./App";
 
-test('renders Github Actions heading', () => {
-  render(<App />);
-  const headingElement = screen.getByText(/Github Actions/i);
-  expect(headingElement).toBeInTheDocument();
-});
+describe("App", () => {
+  it("renders brand title", () => {
+    render(<App />);
 
-test('contains an h1 element', () => {
-  const { container } = render(<App />);
-  const h1Element = container.querySelector('h1');
-  expect(h1Element).toBeInTheDocument();
-});
+    expect(
+      screen.getByText(/frosty bliss/i)
+    ).toBeInTheDocument();
+  });
 
-test('contains an h2 element', () => {
-  const { container } = render(<App />);
-  const h2Element = container.querySelector('h2');
-  expect(h2Element).toBeInTheDocument();
+  it("renders order button", () => {
+    render(<App />);
+
+    expect(
+      screen.getByRole("button", {
+        name: /order now/i,
+      })
+    ).toBeInTheDocument();
+  });
+
+  it("renders flavor section", () => {
+    render(<App />);
+
+    expect(
+      screen.getByText(/popular flavors/i)
+    ).toBeInTheDocument();
+  });
 });
