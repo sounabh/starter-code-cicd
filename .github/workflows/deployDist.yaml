@@ -1,44 +1,57 @@
 name: deploy dist
-on: push
+
+on:
+  push:
 
 jobs:
-    test:
+  test:
+    runs-on: ubuntu-latest
 
-        runs-on: ubuntu-latest
-        steps:
-         - name: get code
-           uses: actions/checkout@v4
-        
-  
-         - name: Show files
-           run:  ls -la
+    steps:
+      - name: Get code
+        uses: actions/checkout@v4
 
-         - name: Node 20
-           uses: actions/setup-node@v4
-           with:
-              node-version: 20
-           
-         - name: Print node v
-           run: node -v      
+      - name: Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-         - name: Install Deps
-           run: npm ci
-           
-         - name: Run Tests
-           run: npm run test
+      - name: Cache deps
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
 
-           
+      - name: Install deps
+        run: npm ci
 
-    deploy:
-         needs: test
-         runs-on: ubuntu-latest 
-         
-         steps:
-          - name: deploy
-            run: echo "🚀 Deploying application..."
-       
-           
-        #  run: |
-         #  echo "cloning repo"
-         #  echo "${{toJson(github)}}"
-         #  git clone https://github.com/${{github.repository}}.git
+      - name: Run tests
+        run: npm run test
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get code
+        uses: actions/checkout@v4
+
+      - name: Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Cache deps
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build app
+        run: npm run build
+
+      - name: Deploy
+        run: echo "🚀 Deploying application..."
